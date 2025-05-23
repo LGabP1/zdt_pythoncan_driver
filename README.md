@@ -38,7 +38,7 @@ if __name__ == "__main__":
     ret = zdt.cmd_motor_enable_control(enable=True) # Need to enable the control before sending commands to move it
     print(f"Command zdt.cmd_motor_enable_control(enable=True) returned {ret}!")
 
-    ret = zdt.cmd_position_mode_control(3000, 1000, 0) # Drive at given speed (in RPM)
+    ret = zdt.cmd_position_mode_control(3000, 1000, 0) # Drive to given position (in pulse count)
     print(f"Command zdt.cmd_position_mode_control(3000, 1000, 0) returned {ret}!")
 ```
 
