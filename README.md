@@ -55,7 +55,7 @@ The following objects are of particular interest:
 * Several dataclasses wrapping command parameters.
 * Support for all checksums supported by the board through `lib_bytes.ChecksumABC` and its subclasses. These can be accessed with `lib_bytes.Checksums` enum as well for easier use. Checksums are:
     * `lib_bytes.Checksums.CS0x6B`: "0x6B" is always the ending byte. 
-    * `lib_bytes.Checksums.CSXOR`: XOR checksum (XOR of all bytes),( send is working but receive to debug)
+    * `lib_bytes.Checksums.CSXOR`: XOR checksum.
     * (`lib_bytes.Checksums.CSCRC8`: CRC8 checksum, implementation to fix)
     * (`lib_bytes.Checksums.CSModbus`: Not yet implemented)
 * `lib_logger.MyLogger` - A simple `logging.Logger` subclass which can log to both console and file.

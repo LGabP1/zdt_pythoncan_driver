@@ -11,7 +11,7 @@ from .lib_threading import Threader
 
 class CANInterface:
     """CAN Interface implementation."""
-    buses: dict[tuple[str, str], BusABC | None] # { (interface, channel): bus}
+    buses: dict[tuple[str, str], BusABC | None] = {} # { (interface, channel): bus}
 
     def __init__(self, interface: str, channel: str, bitrate: int, max_queue_size: int = 10, logger: Optional[Logger] = None):
         """CAN Interface implementation.
@@ -41,8 +41,9 @@ class CANInterface:
 
     def _loop(self):
         while self._threader._running:
-            if CANInterface.buses[(self.interface, self.channel)]:
-                msg = CANInterface.buses[(self.interface, self.channel)].recv(1.0)
+            bus = CANInterface.buses[(self.interface, self.channel)]
+            if bus:
+                msg = bus.recv(1.0)
                 if msg:
                     with self._threader.get_lock():
                         if self.logger:
@@ -74,13 +75,14 @@ class CANInterface:
 
     def close(self) -> None:
         self._threader.stop()
-        if CANInterface.buses[(self.interface, self.channel)]:
-            CANInterface.buses[(self.interface, self.channel)].shutdown()
-            CANInterface.buses[(self.interface, self.channel)] = None
+        bus = CANInterface.buses[(self.interface, self.channel)]
+        if bus:
+            bus.shutdown()
+            bus = None # Reset
     
     def receive_from(self, can_id: int, timeout: float | None, check_frequency: Optional[float] = 100) -> Message | None:
         """Receive a message from given can_id. If timeout is None, will wait indefinitely."""
-        if check_frequency <= 0:
+        if not check_frequency or check_frequency <= 0:
             raise ValueError(f"check_frequency should be non negative, not {check_frequency} !")
 
         if timeout is None:
@@ -102,8 +104,9 @@ class CANInterface:
     
     def send(self, msg: Message, timeout: Optional[float] = None) -> bool:
         """Sends a message. Returns False if timeout, True if successful."""
+        bus = CANInterface.buses[(self.interface, self.channel)]
         try:
-            CANInterface.buses[(self.interface, self.channel)].send(msg, timeout=timeout)
+            bus.send(msg, timeout=timeout)
             if self.logger:
                 with self._threader.get_lock():
                     self.logger.debug(f"Message sent: {msg}")

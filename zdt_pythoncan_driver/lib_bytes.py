@@ -33,12 +33,13 @@ class CSXOR(ChecksumABC):
         for byte in bytes:
             checksum ^= byte
         return bytearray([checksum]) # Should be 1 byte 
+
 class CSCRC8(ChecksumABC):
     """Checksum description for CRC8 checksum. """
     @staticmethod
     @override
     def get(bytes: bytearray) -> bytearray:
-        crc = 0
+        crc = 0x00
         for byte in bytes:
             crc ^= byte
             for _ in range(8):
@@ -46,7 +47,7 @@ class CSCRC8(ChecksumABC):
                     crc = (crc << 1) ^ 0x07
                 else:
                     crc <<= 1
-            crc &= 0xFF
+                crc &= 0xFF
         return bytearray([crc])
 class CSModbus(ChecksumABC):
     """Checksum description for Modbus checksum"""
