@@ -44,7 +44,7 @@ if __name__ == "__main__":
     print(f"Command zdt.cmd_position_mode_control(3000, 1000, 0) returned {ret}!")
 ```
 
-Please also refer to `example.py` to see another example with speed control.
+Please also refer to `example.py` and to see other example with speed control. Please refer to `example_double.py` for an example code driving several ZDT devices. 
 
 ## Features
 
@@ -87,3 +87,4 @@ This library is heavily based on [Emm_V5.0 Manual Rev1.3](https://blog.csdn.net/
 * `v1.01` New CAN handling interface allowing several ZDT devices
 * `v1.02` Updated and fixed commands 
 * `v1.03` Fixed endianness issues, static bus instances to allow multiple devices handling
+* `v1.04` Debug code allowing simultaneous control of several ZDT devices
